@@ -68,10 +68,12 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.scene.Draw(screen)
 	if !isTransitionFinish {
-		if tick <= transitionFrame {
-			getOutTransitionHandler().Draw(tick, transitionFrame, g.outsideWidth, g.outsideHeight, clr, screen)
+		if tick <= outSceneEffect.Frame {
+			outSceneEffect.Tick = tick
+			getOutTransitionHandler().Draw(outSceneEffect, g.outsideWidth, g.outsideHeight, screen)
 		} else {
-			getInTransitionHandler().Draw(tick-transitionFrame, transitionFrame, g.outsideWidth, g.outsideHeight, clr, screen)
+			inSceneEffect.Tick = tick - outSceneEffect.Tick
+			getInTransitionHandler().Draw(inSceneEffect, g.outsideWidth, g.outsideHeight, screen)
 		}
 	}
 }
@@ -84,23 +86,23 @@ func (g *Game) Update() error {
 
 	// g.scene.Update()でisTransitionFinishが書き換わるので
 	// 単純にelseで繋げてはいけない
-	finishFrame := transitionFrame * 2
+	finishFrame := outSceneEffect.Frame + inSceneEffect.Frame
 	if !isTransitionFinish {
 		tick += 1
 
 		// シーン切り替え前のトランジションがImmediatelyの場合はtickを待たず即時切り替え
-		if tick < transitionFrame && outTransitionType == Immediately {
-			tick = transitionFrame
+		if tick < outSceneEffect.Frame && outSceneEffect.Type == Immediately {
+			tick = outSceneEffect.Frame
 		}
 
-		if tick >= transitionFrame {
+		if tick >= outSceneEffect.Frame {
 			if current != next {
 				g.scene = g.route[next]
 				current = next
 				g.scene.Init()
 			}
 			// シーン切り替え後のトランジションがImmediatelyの場合はtickを待たず終了
-			if inTransitionType == Immediately {
+			if inSceneEffect.Type == Immediately {
 				tick = finishFrame
 			}
 		}

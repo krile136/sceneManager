@@ -7,80 +7,88 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type TransitionOptions struct {
-	OutTransitionType TransitionType
-	InTransitionType  TransitionType
-	TransitionFrame   int
-	Clr               color.RGBA
-}
-
-type TransitionType int
+type sceneEffectType int
 
 const (
-	Immediately TransitionType = iota
+	Immediately sceneEffectType = iota
 	FadeIn
 	FadeOut
 	CircularClosing
 	CircularOpening
 )
 
-var transitionHandlerMap = map[TransitionType]TransitionInterface{
-	Immediately:     &TransitionImmediately{},
-	FadeIn:          &TransitionFadeIn{},
-	FadeOut:         &TransitionFadeOut{},
-	CircularClosing: &TransitionCircularClosing{},
-	CircularOpening: &TransitionCircularOpening{},
+type TransitionOptions struct {
+	OutSceneEffect SceneEffect
+	InSceneEffect  SceneEffect
 }
 
-func getOutTransitionHandler() TransitionInterface {
-	return transitionHandlerMap[outTransitionType]
-}
-func getInTransitionHandler() TransitionInterface {
-	return transitionHandlerMap[inTransitionType]
-}
-
-type TransitionInterface interface {
-	Draw(tick int, transitionFrame int, w int, h int, clr color.RGBA, screen *ebiten.Image)
+type SceneEffect struct {
+	Type  sceneEffectType
+	Clr   color.RGBA
+	Tick  int
+	Frame int
 }
 
-type TransitionImmediately struct{}
+var transitionHandlerMap = map[sceneEffectType]transitionInterface{
+	Immediately:     &immediatelyEffect{},
+	FadeIn:          &fadeInEffect{},
+	FadeOut:         &fadeOutEffect{},
+	CircularClosing: &circularClosingEffect{},
+	CircularOpening: &circularOpeningEffect{},
+}
 
-func (ti *TransitionImmediately) Draw(tick, transitionFrame, w, h int, clr color.RGBA, screen *ebiten.Image) {
+func getOutTransitionHandler() transitionInterface {
+	return transitionHandlerMap[outSceneEffect.Type]
+}
+func getInTransitionHandler() transitionInterface {
+	return transitionHandlerMap[inSceneEffect.Type]
+}
+
+type transitionInterface interface {
+	Draw(sceneEffect SceneEffect, w, h int, screen *ebiten.Image)
+}
+
+type immediatelyEffect struct{}
+
+func (ie *immediatelyEffect) Draw(sceneEffect SceneEffect, w, h int, screen *ebiten.Image) {
 	img := ebiten.NewImage(w, h)
-	clr = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	clr := sceneEffect.Clr
 	img.Fill(clr)
 	screen.DrawImage(img, nil)
 }
 
-type TransitionFadeIn struct{}
+type fadeInEffect struct{}
 
-func (tfi *TransitionFadeIn) Draw(tick, transitionFrame, w, h int, clr color.RGBA, screen *ebiten.Image) {
-	alpha := 255 - 255*(float64(tick)/float64(transitionFrame))
+func (fie *fadeInEffect) Draw(sceneEffect SceneEffect, w, h int, screen *ebiten.Image) {
+	alpha := 255 - 255*(float64(sceneEffect.Tick)/float64(sceneEffect.Frame))
 	img := ebiten.NewImage(w, h)
-  clr.A = uint8(alpha)
+	clr := sceneEffect.Clr
+	clr.A = uint8(alpha)
 	img.Fill(clr)
 	screen.DrawImage(img, nil)
 }
 
-type TransitionFadeOut struct{}
+type fadeOutEffect struct{}
 
-func (tfo *TransitionFadeOut) Draw(tick, transitionFrame, w, h int, clr color.RGBA, screen *ebiten.Image) {
-	alpha := 255 * (float64(tick) / float64(transitionFrame))
+func (foe *fadeOutEffect) Draw(sceneEffect SceneEffect, w, h int, screen *ebiten.Image) {
+	alpha := 255 * (float64(sceneEffect.Tick) / float64(sceneEffect.Frame))
 	img := ebiten.NewImage(w, h)
-  clr.A = uint8(alpha)
+	clr := sceneEffect.Clr
+	clr.A = uint8(alpha)
 	img.Fill(clr)
 	screen.DrawImage(img, nil)
 }
 
-type TransitionCircularClosing struct{}
+type circularClosingEffect struct{}
 
-func (tcc *TransitionCircularClosing) Draw(tick, transitionFrame, w, h int, clr color.RGBA, screen *ebiten.Image) {
+func (cce *circularClosingEffect) Draw(sceneEffect SceneEffect, w, h int, screen *ebiten.Image) {
 	img := ebiten.NewImage(w, h)
-  clr.A = uint8(255)
+	clr := sceneEffect.Clr
+	clr.A = uint8(255)
 	img.Fill(clr)
 
 	radius := math.Sqrt(math.Pow(float64(w)/2, 2) + math.Pow(float64(h)/2, 2))
-	diameter := (radius - radius*(float64(tick)/float64(transitionFrame))) * 2
+	diameter := (radius - radius*(float64(sceneEffect.Tick)/float64(sceneEffect.Frame))) * 2
 	if diameter != 0 {
 		holeImage := createCircleImage(int(diameter), clr)
 
@@ -95,15 +103,16 @@ func (tcc *TransitionCircularClosing) Draw(tick, transitionFrame, w, h int, clr 
 	screen.DrawImage(img, nil)
 }
 
-type TransitionCircularOpening struct{}
+type circularOpeningEffect struct{}
 
-func (tco *TransitionCircularOpening) Draw(tick, transitionFrame, w, h int, clr color.RGBA, screen *ebiten.Image) {
+func (coe *circularOpeningEffect) Draw(sceneEffect SceneEffect, w, h int, screen *ebiten.Image) {
 	img := ebiten.NewImage(w, h)
-  clr.A = uint8(255)
+	clr := sceneEffect.Clr
+	clr.A = uint8(255)
 	img.Fill(clr)
 
 	radius := math.Sqrt(math.Pow(float64(w)/2, 2) + math.Pow(float64(h)/2, 2))
-	diameter := radius * (float64(tick) / float64(transitionFrame)) * 2
+	diameter := radius * (float64(sceneEffect.Tick) / float64(sceneEffect.Frame)) * 2
 	holeImage := createCircleImage(int(diameter), clr)
 
 	holeW := float64(holeImage.Bounds().Dx())

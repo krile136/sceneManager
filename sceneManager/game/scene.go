@@ -11,10 +11,8 @@ var (
 	next               string
 	isTransitionFinish bool
 	tick               int
-	transitionFrame    int
-	outTransitionType  TransitionType
-	inTransitionType   TransitionType
-	clr                color.RGBA
+	outSceneEffect     SceneEffect
+	inSceneEffect      SceneEffect
 )
 
 type sceneInterface interface {
@@ -30,19 +28,23 @@ func Reload() {
 
 func Change(scenaName string, op *TransitionOptions) {
 	if op == nil {
+		outSceneEffect := &SceneEffect{
+			Type:  Immediately,
+			Clr:   color.RGBA{R: 0, G: 0, B: 0, A: 255},
+			Tick:  0,
+			Frame: 30,
+		}
+		inSceneEffect := outSceneEffect
+
 		op = &TransitionOptions{
-			OutTransitionType: Immediately,
-			InTransitionType:  Immediately,
-			TransitionFrame:   0,
-			Clr:               color.RGBA{R: 0, G: 0, B: 0, A: 255},
+			OutSceneEffect: *outSceneEffect,
+			InSceneEffect:  *inSceneEffect,
 		}
 	}
 
 	next = scenaName
 	isTransitionFinish = false
-	tick = 0
-	transitionFrame = op.TransitionFrame
-	outTransitionType = op.OutTransitionType
-	inTransitionType = op.InTransitionType
-	clr = op.Clr
+  tick = 0
+	outSceneEffect = op.OutSceneEffect
+	inSceneEffect = op.InSceneEffect
 }
