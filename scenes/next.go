@@ -21,13 +21,11 @@ func (n *Next) Update() error {
 		outSceneEffect := &game.SceneEffect{
 			Type:  game.FadeOut,
 			Clr:   color.RGBA{R: 0, G: 0, B: 0, A: 255},
-			Tick:  0,
 			Frame: 30,
 		}
 		inSceneEffect := &game.SceneEffect{
 			Type:  game.FadeIn,
 			Clr:   color.RGBA{R: 0, G: 0, B: 0, A: 255},
-			Tick:  0,
 			Frame: 30,
 		}
 

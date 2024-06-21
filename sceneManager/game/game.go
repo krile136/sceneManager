@@ -67,6 +67,10 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 // 通常のDrawと同様に描画を行います
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.scene.Draw(screen)
+  if(customEffect != nil){
+    transitionHandlerMap[customEffect.Type].Draw(*customEffect, g.outsideWidth, g.outsideHeight, screen);  
+    customEffect = nil
+  }
 	if !isTransitionFinish {
 		if tick <= outSceneEffect.Frame {
 			outSceneEffect.Tick = tick

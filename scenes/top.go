@@ -62,19 +62,21 @@ func createCircleImage(diameter int) *ebiten.Image {
 }
 
 func (t *Top) Update() error {
+
 	if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
 
 		outSceneEffect := &game.SceneEffect{
-			Type:  game.CircularClosing,
+			Type:  game.CircularFocusClosing,
+			Focus: game.Focus{X: 100, Y: 100},
 			Clr:   color.RGBA{R: 24, G: 235, B: 249, A: 255},
-			Tick:  0,
-			Frame: 30,
+			Frame: 60,
 		}
+
 		inSceneEffect := &game.SceneEffect{
-			Type:  game.CircularOpening,
+			Type:  game.CircularFocusOpening,
+			Focus: game.Focus{X: 200, Y: 200},
 			Clr:   color.RGBA{R: 24, G: 235, B: 249, A: 255},
-			Tick:  0,
-			Frame: 30,
+			Frame: 60,
 		}
 
 		op := &game.TransitionOptions{

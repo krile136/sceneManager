@@ -13,6 +13,7 @@ var (
 	tick               int
 	outSceneEffect     SceneEffect
 	inSceneEffect      SceneEffect
+  customEffect       *SceneEffect
 )
 
 type sceneInterface interface {
@@ -44,7 +45,11 @@ func Change(scenaName string, op *TransitionOptions) {
 
 	next = scenaName
 	isTransitionFinish = false
-  tick = 0
+	tick = 0
 	outSceneEffect = op.OutSceneEffect
 	inSceneEffect = op.InSceneEffect
+}
+
+func ExecuteEffect(effect *SceneEffect){
+  customEffect = effect
 }
