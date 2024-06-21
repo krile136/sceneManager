@@ -27,8 +27,8 @@ type SceneEffect struct {
 	Type  sceneEffectType
 	Focus Focus
 	Clr   color.RGBA
-	Tick  int
-	Frame int
+	Tick  float64
+	Frame float64
 }
 
 type Focus struct {

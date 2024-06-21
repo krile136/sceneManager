@@ -10,7 +10,7 @@ var (
 	current            string
 	next               string
 	isTransitionFinish bool
-	tick               int
+	tick               float64
 	outSceneEffect     SceneEffect
 	inSceneEffect      SceneEffect
   customEffect       *SceneEffect
