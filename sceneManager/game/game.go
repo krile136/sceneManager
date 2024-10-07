@@ -4,6 +4,8 @@ import (
 	"reflect"
 
 	"github.com/hajimehoshi/ebiten/v2"
+
+	"github.com/krile136/sceneManager/sceneManager/game/effectType"
 )
 
 type Game struct {
@@ -67,10 +69,10 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 // 通常のDrawと同様に描画を行います
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.scene.Draw(screen)
-  if(customEffect != nil){
-    transitionHandlerMap[customEffect.Type].Draw(*customEffect, g.outsideWidth, g.outsideHeight, screen);  
-    customEffect = nil
-  }
+	if customEffect != nil {
+		transitionHandlerMap[customEffect.Type].Draw(*customEffect, g.outsideWidth, g.outsideHeight, screen)
+		customEffect = nil
+	}
 	if !isTransitionFinish {
 		if tick <= outSceneEffect.Frame {
 			outSceneEffect.Tick = tick
@@ -95,7 +97,7 @@ func (g *Game) Update() error {
 		tick += 1
 
 		// シーン切り替え前のトランジションがImmediatelyの場合はtickを待たず即時切り替え
-		if tick < outSceneEffect.Frame && outSceneEffect.Type == Immediately {
+		if tick < outSceneEffect.Frame && outSceneEffect.Type == effectType.Immediately {
 			tick = outSceneEffect.Frame
 		}
 
@@ -106,7 +108,7 @@ func (g *Game) Update() error {
 				g.scene.Init()
 			}
 			// シーン切り替え後のトランジションがImmediatelyの場合はtickを待たず終了
-			if inSceneEffect.Type == Immediately {
+			if inSceneEffect.Type == effectType.Immediately {
 				tick = finishFrame
 			}
 		}

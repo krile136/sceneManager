@@ -8,6 +8,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/krile136/sceneManager/sceneManager/game"
+	"github.com/krile136/sceneManager/sceneManager/game/effects"
+  "github.com/krile136/sceneManager/sceneManager/game/effectType"
+
 )
 
 type Top struct {
@@ -65,16 +68,16 @@ func (t *Top) Update() error {
 
 	if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
 
-		outSceneEffect := &game.SceneEffect{
-			Type:  game.CircularFocusClosing,
-			Focus: game.Focus{X: 100, Y: 100},
+		outSceneEffect := &effects.SceneEffect{
+			Type:  effectType.CircularFocusClosing,
+			Focus: effects.Focus{X: 100, Y: 100},
 			Clr:   color.RGBA{R: 24, G: 235, B: 249, A: 255},
 			Frame: 60,
 		}
 
-		inSceneEffect := &game.SceneEffect{
-			Type:  game.CircularFocusOpening,
-			Focus: game.Focus{X: 200, Y: 200},
+		inSceneEffect := &effects.SceneEffect{
+			Type:  effectType.CircularFocusOpening,
+			Focus: effects.Focus{X: 200, Y: 200},
 			Clr:   color.RGBA{R: 24, G: 235, B: 249, A: 255},
 			Frame: 60,
 		}

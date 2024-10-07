@@ -4,6 +4,8 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/krile136/sceneManager/sceneManager/game/effects"
+  "github.com/krile136/sceneManager/sceneManager/game/effectType"
 )
 
 var (
@@ -11,9 +13,9 @@ var (
 	next               string
 	isTransitionFinish bool
 	tick               float64
-	outSceneEffect     SceneEffect
-	inSceneEffect      SceneEffect
-  customEffect       *SceneEffect
+	outSceneEffect     effects.SceneEffect
+	inSceneEffect      effects.SceneEffect
+	customEffect       *effects.SceneEffect
 )
 
 type sceneInterface interface {
@@ -29,8 +31,8 @@ func Reload() {
 
 func Change(scenaName string, op *TransitionOptions) {
 	if op == nil {
-		outSceneEffect := &SceneEffect{
-			Type:  Immediately,
+		outSceneEffect := &effects.SceneEffect{
+			Type:  effectType.Immediately,
 			Clr:   color.RGBA{R: 0, G: 0, B: 0, A: 255},
 			Tick:  0,
 			Frame: 30,
@@ -50,6 +52,6 @@ func Change(scenaName string, op *TransitionOptions) {
 	inSceneEffect = op.InSceneEffect
 }
 
-func ExecuteEffect(effect *SceneEffect){
-  customEffect = effect
+func ExecuteEffect(effect *effects.SceneEffect) {
+	customEffect = effect
 }
