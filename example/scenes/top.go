@@ -7,9 +7,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
-	"github.com/krile136/sceneManager/sceneManager/game"
-	"github.com/krile136/sceneManager/sceneManager/game/effects"
-  "github.com/krile136/sceneManager/sceneManager/game/effectType"
+	"github.com/krile136/sceneManager/game"
+	"github.com/krile136/sceneManager/game/effects"
+  "github.com/krile136/sceneManager/game/effectType"
 
 )
 

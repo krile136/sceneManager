@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/krile136/sceneManager/sceneManager/game"
-	"github.com/krile136/sceneManager/scenes"
+	"github.com/krile136/sceneManager/game"
+	"github.com/krile136/sceneManager/example/scenes"
 )
 
 

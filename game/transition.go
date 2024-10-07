@@ -2,8 +2,8 @@ package game
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/krile136/sceneManager/sceneManager/game/effectType"
-	"github.com/krile136/sceneManager/sceneManager/game/effects"
+	"github.com/krile136/sceneManager/game/effectType"
+	"github.com/krile136/sceneManager/game/effects"
 )
 
 type TransitionOptions struct {

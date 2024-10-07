@@ -5,7 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 
-	"github.com/krile136/sceneManager/sceneManager/game/effectType"
+	"github.com/krile136/sceneManager/game/effectType"
 )
 
 type Game struct {
