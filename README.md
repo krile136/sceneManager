@@ -14,7 +14,7 @@
 以下のコマンドでインストールできます:
 
 ```sh
-go get github.com/krile136/sceneManager
+go get github.com/krile136/sceneManager/game
 ```
 
 ## 使い方
@@ -57,7 +57,7 @@ func (n *Next) Update() error {
 }
 
 func (n *Next) Draw(screen *ebiten.Image) {
-  ebitenutil.DebugPrint(screen, "top!")
+  ebitenutil.DebugPrint(screen, "Next!")
 }
 
 ```
